@@ -1,4 +1,5 @@
-package controller;
+package com.oceanview.resort.controller;
+
 
 import com.oceanview.resort.dao.ReservationDAO;
 import com.oceanview.resort.dao.RoomDAO;

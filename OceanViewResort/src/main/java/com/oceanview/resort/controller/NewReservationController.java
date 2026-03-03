@@ -28,8 +28,8 @@ import java.util.ResourceBundle;
 
 /**
  * Task B.ii: Controller Layer (MVC Architecture).
- * Handles the logic for creating new reservations, guest registration, 
- * and real-time cost previews.
+ * This class handles the logic for Task 2: Add New Reservation.
+ * It integrates Guest registration, Room assignment, and Billing triggers.
  */
 public class NewReservationController implements Initializable {
 
@@ -40,7 +40,6 @@ public class NewReservationController implements Initializable {
     
     // Preview Labels
     @FXML private Label nightsPreviewLabel, ratePreviewLabel, estimatedTotalLabel, errorLabel, currentDateLabel;
-    @FXML private Label loggedInUserLabel;
 
     // DAOs and Services
     private final GuestDAO guestDAO = new GuestDAO();
@@ -51,71 +50,30 @@ public class NewReservationController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         currentDateLabel.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
         
-        // Populate Room Types
+        // Populate Room Types (Requirement: Display room types and rates)
         roomTypeComboBox.getItems().addAll("Single Standard", "Double Deluxe", "Family Suite", "Ocean View Suite");
         
-        // Initialize Listeners for real-time cost calculation
+        // Listeners for Real-time Cost Preview
         setupPreviewListeners();
     }
 
     /**
-     * FIXED: Attaches proper JavaFX listeners to UI components.
-     * This replaces the broken 'getSelectionListener' method.
-     */
-    private void setupPreviewListeners() {
-        // Listen for Room Type selection changes
-        roomTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal != null) calculatePreview();
-        });
-
-        // Listen for Check-In date changes
-        checkInDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> calculatePreview());
-
-        // Listen for Check-Out date changes
-        checkOutDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> calculatePreview());
-    }
-
-    /**
-     * Calculates the duration and estimated cost of the stay.
-     */
-    private void calculatePreview() {
-        LocalDate checkIn = checkInDatePicker.getValue();
-        LocalDate checkOut = checkOutDatePicker.getValue();
-        String type = roomTypeComboBox.getValue();
-
-        if (checkIn != null && checkOut != null && type != null) {
-            long nights = ChronoUnit.DAYS.between(checkIn, checkOut);
-            
-            if (nights > 0) {
-                double rate = getRate(type);
-                double total = rate * nights;
-
-                nightsPreviewLabel.setText(String.valueOf(nights));
-                ratePreviewLabel.setText("Rs. " + String.format("%,.2f", rate));
-                estimatedTotalLabel.setText("Rs. " + String.format("%,.2f", total));
-                errorLabel.setText(""); 
-            } else {
-                errorLabel.setText("Check-out date must be after check-in date.");
-                resetPreviewLabels();
-            }
-        }
-    }
-
-    /**
-     * Handles the reservation submission process.
+     * Task 2: Add New Reservation logic.
+     * Step 1: Validate. Step 2: Register Guest. Step 3: Find Room. Step 4: Save Booking.
      */
     @FXML
     private void handleSubmitReservation(ActionEvent event) {
-        errorLabel.setText(""); 
+        errorLabel.setText(""); // Reset errors
 
+        // 1. Validation (Task B)
         if (!isInputValid()) return;
 
         try {
-            // Register Guest
+            // 2. Register/Find Guest
             Guest newGuest = new Guest(guestNameField.getText(), addressField.getText(), contactNumberField.getText());
             int guestId = guestDAO.addGuest(newGuest);
 
-            // Find an Available Room
+            // 3. Find an Available Room of selected type
             List<Room> available = roomDAO.getAvailableRooms();
             Room selectedRoom = available.stream()
                     .filter(r -> r.getRoomType().equalsIgnoreCase(roomTypeComboBox.getValue()))
@@ -127,7 +85,7 @@ public class NewReservationController implements Initializable {
                 return;
             }
 
-            // Create Reservation
+            // 4. Create Reservation Object
             Reservation reservation = new Reservation(
                     guestId, 
                     selectedRoom.getRoomNumber(), 
@@ -135,7 +93,7 @@ public class NewReservationController implements Initializable {
                     checkOutDatePicker.getValue()
             );
 
-            // Save through Service Layer
+            // 5. Save through Service (Triggers Billing and Web Service Notifications - Task B.i)
             boolean success = reservationService.createNewBooking(reservation, "guest@example.com");
 
             if (success) {
@@ -148,7 +106,27 @@ public class NewReservationController implements Initializable {
         }
     }
 
+  private void setupPreviewListeners() {
+        // FIXED: Replaced invalid method with standard JavaFX property listeners
+        roomTypeComboBox.valueProperty().addListener((obs, oldVal, newVal) -> calculatePreview());
+        checkInDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> calculatePreview());
+        checkOutDatePicker.valueProperty().addListener((obs, oldVal, newVal) -> calculatePreview());
+    }
+    private void calculatePreview() {
+        if (checkInDatePicker.getValue() != null && checkOutDatePicker.getValue() != null) {
+            long nights = ChronoUnit.DAYS.between(checkInDatePicker.getValue(), checkOutDatePicker.getValue());
+            if (nights > 0) {
+                nightsPreviewLabel.setText(String.valueOf(nights));
+                // Simulated rates based on room type
+                double rate = getRate(roomTypeComboBox.getValue());
+                ratePreviewLabel.setText("Rs. " + rate);
+                estimatedTotalLabel.setText("Rs. " + (rate * nights));
+            }
+        }
+    }
+
     private double getRate(String type) {
+        if (type == null) return 0.0;
         return switch (type) {
             case "Double Deluxe" -> 15000.0;
             case "Family Suite" -> 25000.0;
@@ -161,24 +139,21 @@ public class NewReservationController implements Initializable {
         if (ValidationHelper.isEmpty(guestNameField.getText()) || 
             ValidationHelper.isEmpty(contactNumberField.getText()) || 
             roomTypeComboBox.getValue() == null) {
-            errorLabel.setText("Please fill in all required fields.");
+            errorLabel.setText("Please fill in all mandatory fields (*)");
             return false;
         }
-        return ValidationHelper.isValidStayDates(checkInDatePicker.getValue(), checkOutDatePicker.getValue());
+        if (!ValidationHelper.isValidStayDates(checkInDatePicker.getValue(), checkOutDatePicker.getValue())) {
+            errorLabel.setText("Check-out date must be after check-in date.");
+            return false;
+        }
+        return true;
     }
 
-    private void resetPreviewLabels() {
-        nightsPreviewLabel.setText("—");
-        ratePreviewLabel.setText("—");
-        estimatedTotalLabel.setText("—");
-    }
-
-    @FXML 
-    private void handleClearForm(ActionEvent event) {
+    @FXML private void handleClearForm(ActionEvent event) {
         guestNameField.clear(); addressField.clear(); contactNumberField.clear();
         roomTypeComboBox.getSelectionModel().clearSelection();
         checkInDatePicker.setValue(null); checkOutDatePicker.setValue(null);
-        resetPreviewLabels();
+        nightsPreviewLabel.setText("—"); estimatedTotalLabel.setText("—");
     }
 
     // Navigation Methods
@@ -186,9 +161,9 @@ public class NewReservationController implements Initializable {
     @FXML private void showViewReservations(ActionEvent event) { navigate(event, "/view/viewreservation.fxml"); }
     @FXML private void showBilling(ActionEvent event) { navigate(event, "/view/billing.fxml"); }
     @FXML private void showGuests(ActionEvent event) { navigate(event, "/view/guest_management.fxml"); }
+    @FXML private void showNewReservation(ActionEvent event) {} // Already here
+    @FXML private void showHelp(ActionEvent event) { System.out.println("Displaying Help..."); }
     @FXML private void handleLogout(ActionEvent event) { navigate(event, "/view/Login.fxml"); }
-    @FXML private void showNewReservation(ActionEvent event) {} // Refresh current page logic
-    @FXML private void showHelp(ActionEvent event) { System.out.println("Displaying Help Guidelines..."); }
 
     private void navigate(ActionEvent event, String path) {
         try {

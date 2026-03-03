@@ -22,8 +22,7 @@
                <children>
                   <ImageView fx:id="logoView" fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../resource/icon.jpeg" />
-                     </image>
+<Image url="@/assets/icon.jpeg" />                     </image>
                      <clip>
                         <Circle centerX="80.0" centerY="80.0" radius="80.0" />
                      </clip>

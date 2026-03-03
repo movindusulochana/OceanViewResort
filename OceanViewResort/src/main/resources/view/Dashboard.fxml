@@ -39,8 +39,7 @@
                             <ImageView fx:id="sidebarLogoView" fitHeight="90.0" fitWidth="90.0"
                                        pickOnBounds="true" preserveRatio="true">
                                 <image>
-                                    <Image url="@../resource/icon.jpeg" />
-                                </image>
+<Image url="@/assets/icon.jpeg" />                                </image>
                                 <clip>
                                     <Circle centerX="45.0" centerY="45.0" radius="45.0" />
                                 </clip>

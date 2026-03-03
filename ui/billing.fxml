@@ -1,509 +1,107 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
-<?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.effect.DropShadow?>
 
-<BorderPane prefHeight="650.0" prefWidth="1100.0"
+<BorderPane prefHeight="520.0" prefWidth="850.0"
             xmlns="http://javafx.com/javafx/17"
-            xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="controller.BillingController">
+            xmlns:fx="http://javafx.com/fxml/1">
 
+    <!-- TITLE -->
+    <top>
+        <HBox alignment="CENTER">
+            <padding>
+                <Insets top="15" bottom="15"/>
+            </padding>
+            <children>
+                <Label text="Billing Management">
+                    <font>
+                        <Font name="System Bold" size="22"/>
+                    </font>
+                </Label>
+            </children>
+        </HBox>
+    </top>
+
+    <!-- LEFT FORM -->
     <left>
-        <VBox prefWidth="240.0" prefHeight="650.0" spacing="0.0"
-              style="-fx-background-color: linear-gradient(to bottom, #016a8a, #005b96);">
+        <VBox spacing="14" prefWidth="320">
+            <padding>
+                <Insets top="15" left="25" right="25" bottom="25"/>
+            </padding>
 
-            <VBox alignment="CENTER" spacing="12.0">
-                <padding><Insets top="30.0" bottom="20.0" left="20.0" right="20.0"/></padding>
-                <children>
-                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-                                minHeight="-Infinity" minWidth="-Infinity"
-                                prefHeight="90.0" prefWidth="90.0">
-                        <children>
-                            <ImageView fx:id="sidebarLogoView" fitHeight="90.0" fitWidth="90.0"
-                                       pickOnBounds="true" preserveRatio="true">
-                                <image><Image url="@../resource/icon.jpeg"/></image>
-                                <clip><Circle centerX="45.0" centerY="45.0" radius="45.0"/></clip>
-                                <effect><DropShadow color="#003366" radius="8" offsetX="2" offsetY="2"/></effect>
-                            </ImageView>
-                        </children>
-                    </AnchorPane>
-                    <Label text="OCEAN VIEW" textFill="WHITE">
-                        <font><Font name="System Bold" size="18.0"/></font>
-                    </Label>
-                    <Label text="RESORT" textFill="WHITE">
-                        <font><Font size="13.0"/></font>
-                    </Label>
-                </children>
-            </VBox>
+            <children>
 
-            <Separator style="-fx-background-color: rgba(255,255,255,0.3);">
-                <padding><Insets left="20.0" right="20.0"/></padding>
-            </Separator>
+                <Label text="Bill ID"/>
+                <TextField fx:id="billIdField"/>
 
-            <VBox spacing="5.0" VBox.vgrow="ALWAYS">
-                <padding><Insets top="20.0" left="15.0" right="15.0"/></padding>
-                <children>
-                    <Label text="MAIN MENU" textFill="rgba(255,255,255,0.6)">
-                        <font><Font name="System Bold" size="10.0"/></font>
-                        <padding><Insets left="10.0" bottom="5.0"/></padding>
-                    </Label>
-                    <Button fx:id="navDashboardBtn" mnemonicParsing="false" onAction="#goToDashboard"
-                            prefHeight="42.0" prefWidth="210.0" text="  Dashboard"
-                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font size="13.0"/></font>
-                    </Button>
-                    <Button fx:id="navNewReservationBtn" mnemonicParsing="false" onAction="#showNewReservation"
-                            prefHeight="42.0" prefWidth="210.0" text="  New Reservation"
-                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font size="13.0"/></font>
-                    </Button>
-                    <Button fx:id="navViewReservationsBtn" mnemonicParsing="false" onAction="#showViewReservations"
-                            prefHeight="42.0" prefWidth="210.0" text="  View Reservations"
-                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font size="13.0"/></font>
-                    </Button>
-                    <Button fx:id="navBillingBtn" mnemonicParsing="false" onAction="#showBilling"
-                            prefHeight="42.0" prefWidth="210.0" text="  Billing"
-                            style="-fx-background-color: rgba(255,255,255,0.25); -fx-text-fill: white; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font name="System Bold" size="13.0"/></font>
-                    </Button>
-                    <Button fx:id="navGuestsBtn" mnemonicParsing="false" onAction="#showGuests"
-                            prefHeight="42.0" prefWidth="210.0" text="  Guest Management"
-                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font size="13.0"/></font>
-                    </Button>
-                    <Label text="SYSTEM" textFill="rgba(255,255,255,0.6)">
-                        <font><Font name="System Bold" size="10.0"/></font>
-                        <padding><Insets left="10.0" top="15.0" bottom="5.0"/></padding>
-                    </Label>
-                    <Button fx:id="navHelpBtn" mnemonicParsing="false" onAction="#showHelp"
-                            prefHeight="42.0" prefWidth="210.0" text="  Help"
-                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font size="13.0"/></font>
-                    </Button>
-                    <Button fx:id="navLogoutBtn" mnemonicParsing="false" onAction="#handleLogout"
-                            prefHeight="42.0" prefWidth="210.0" text="  Logout"
-                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
-                        <font><Font size="13.0"/></font>
-                    </Button>
-                </children>
-            </VBox>
+                <Label text="Guest Name"/>
+                <TextField fx:id="guestNameField"/>
 
-            <VBox alignment="CENTER_LEFT"
-                  style="-fx-background-color: rgba(0,0,0,0.2); -fx-background-radius: 10;">
-                <padding><Insets top="12.0" bottom="12.0" left="15.0" right="15.0"/></padding>
-                <VBox.margin><Insets bottom="15.0" left="15.0" right="15.0"/></VBox.margin>
-                <children>
-                    <Label text="Logged in as" textFill="rgba(255,255,255,0.6)">
-                        <font><Font size="10.0"/></font>
-                    </Label>
-                    <Label fx:id="loggedInUserLabel" text="Staff Member" textFill="WHITE">
-                        <font><Font name="System Bold" size="13.0"/></font>
-                    </Label>
-                </children>
-            </VBox>
+                <Label text="Room Number"/>
+                <TextField fx:id="roomNumberField"/>
+
+                <Label text="Room Charges"/>
+                <TextField fx:id="roomChargesField"/>
+
+                <Label text="Extra Services"/>
+                <TextField fx:id="extraServicesField"/>
+
+                <Label text="Total Amount"/>
+                <TextField fx:id="totalAmountField" editable="false"/>
+
+                <Label text="Payment Method"/>
+                <ComboBox fx:id="paymentMethodBox"/>
+
+                <!-- BUTTON ROW -->
+                <HBox spacing="12" alignment="CENTER">
+                    <children>
+
+                        <Button text="Calculate"
+                                prefWidth="90"
+                                style="-fx-background-color: #1976d2; -fx-text-fill: white; -fx-background-radius: 15;"/>
+
+                        <Button text="Print"
+                                prefWidth="80"
+                                style="-fx-background-color: #388e3c; -fx-text-fill: white; -fx-background-radius: 15;"/>
+
+                        <Button text="Clear"
+                                prefWidth="80"
+                                style="-fx-background-color: gray; -fx-text-fill: white; -fx-background-radius: 15;"/>
+
+                    </children>
+                </HBox>
+
+            </children>
         </VBox>
     </left>
 
+    <!-- TABLE -->
     <center>
-        <VBox spacing="0.0" style="-fx-background-color: #f0f4f8;">
+        <VBox spacing="10">
+            <padding>
+                <Insets top="15" right="20" bottom="20"/>
+            </padding>
 
-            <HBox prefHeight="65.0" alignment="CENTER_LEFT"
-                  style="-fx-background-color: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);">
-                <padding><Insets left="30.0" right="30.0"/></padding>
-                <children>
-                    <Label text="Billing" textFill="#333333">
-                        <font><Font name="System Bold" size="20.0"/></font>
-                    </Label>
-                    <HBox HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="currentDateLabel" text="" textFill="#888888">
-                        <font><Font size="13.0"/></font>
-                    </Label>
-                </children>
-            </HBox>
+            <children>
 
-            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
-                        style="-fx-background-color: transparent; -fx-background: transparent;">
-                <content>
-                    <VBox spacing="20.0">
-                        <padding><Insets top="25.0" bottom="30.0" left="25.0" right="25.0"/></padding>
-                        <children>
+                <TableView fx:id="billingTable">
 
-                            <VBox style="-fx-background-color: #ffffff; -fx-background-radius: 14;
-                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
-                                <padding><Insets top="20.0" bottom="20.0" left="24.0" right="24.0"/></padding>
-                                <children>
-                                    <HBox spacing="14.0" alignment="CENTER_LEFT">
-                                        <children>
-                                            <VBox spacing="5.0" HBox.hgrow="ALWAYS">
-                                                <children>
-                                                    <Label text="Reservation Number" textFill="#666666">
-                                                        <font><Font size="12.0"/></font>
-                                                    </Label>
-                                                    <TextField fx:id="reservationLookupField"
-                                                               prefHeight="40.0"
-                                                               promptText="Enter reservation number, e.g. RES-0001"
-                                                               style="-fx-background-radius: 20; -fx-border-color: #005b96; -fx-border-radius: 20;"/>
-                                                </children>
-                                            </VBox>
-                                            <VBox spacing="5.0" alignment="BOTTOM_LEFT">
-                                                <children>
-                                                    <Label text=" "><font><Font size="12.0"/></font></Label>
-                                                    <Button fx:id="lookupBtn" mnemonicParsing="false"
-                                                            onAction="#handleLookup"
-                                                            prefHeight="40.0" prefWidth="120.0" text="Load Bill"
-                                                            style="-fx-background-color: #005b96; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;">
-                                                        <font><Font name="System Bold" size="13.0"/></font>
-                                                    </Button>
-                                                </children>
-                                            </VBox>
-                                            <VBox spacing="5.0" alignment="BOTTOM_LEFT">
-                                                <children>
-                                                    <Label text=" "><font><Font size="12.0"/></font></Label>
-                                                    <Button fx:id="clearBtn" mnemonicParsing="false"
-                                                            onAction="#handleClear"
-                                                            prefHeight="40.0" prefWidth="80.0" text="Clear"
-                                                            style="-fx-background-color: transparent; -fx-text-fill: #005b96; -fx-border-color: #005b96; -fx-border-radius: 20; -fx-background-radius: 20; -fx-cursor: hand;">
-                                                        <font><Font size="13.0"/></font>
-                                                    </Button>
-                                                </children>
-                                            </VBox>
-                                        </children>
-                                    </HBox>
-                                    <Label fx:id="lookupErrorLabel" text="" textFill="#d32f2f">
-                                        <font><Font size="12.0"/></font>
-                                        <VBox.margin><Insets top="4.0"/></VBox.margin>
-                                    </Label>
-                                </children>
-                            </VBox>
+                    <columns>
+                        <TableColumn text="Bill ID" prefWidth="80"/>
+                        <TableColumn text="Guest Name" prefWidth="120"/>
+                        <TableColumn text="Room No" prefWidth="80"/>
+                        <TableColumn text="Charges" prefWidth="90"/>
+                        <TableColumn text="Extras" prefWidth="90"/>
+                        <TableColumn text="Total" prefWidth="90"/>
+                        <TableColumn text="Payment" prefWidth="100"/>
+                    </columns>
 
-                            <HBox fx:id="guestSummaryBox" spacing="0.0" visible="false" managed="false"
-                                  style="-fx-background-color: #ffffff; -fx-background-radius: 14;
-                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
-                                <padding><Insets top="16.0" bottom="16.0" left="24.0" right="24.0"/></padding>
-                                <children>
-                                    <VBox spacing="2.0" prefWidth="180.0">
-                                        <children>
-                                            <Label text="GUEST" textFill="#888888"><font><Font name="System Bold" size="10.0"/></font></Label>
-                                            <Label fx:id="summaryGuestNameLabel" text="--" textFill="#333333"><font><Font name="System Bold" size="14.0"/></font></Label>
-                                            <Label fx:id="summaryContactLabel" text="--" textFill="#888888"><font><Font size="11.0"/></font></Label>
-                                        </children>
-                                    </VBox>
-                                    <Separator orientation="VERTICAL" style="-fx-background-color: #e0e8f0;">
-                                        <HBox.margin><Insets left="16.0" right="16.0"/></HBox.margin>
-                                    </Separator>
-                                    <VBox spacing="2.0" prefWidth="140.0">
-                                        <children>
-                                            <Label text="ROOM TYPE" textFill="#888888"><font><Font name="System Bold" size="10.0"/></font></Label>
-                                            <Label fx:id="summaryRoomTypeLabel" text="--" textFill="#333333"><font><Font name="System Bold" size="14.0"/></font></Label>
-                                            <Label fx:id="summaryRoomRateLabel" text="LKR -- / night" textFill="#888888"><font><Font size="11.0"/></font></Label>
-                                        </children>
-                                    </VBox>
-                                    <Separator orientation="VERTICAL" style="-fx-background-color: #e0e8f0;">
-                                        <HBox.margin><Insets left="16.0" right="16.0"/></HBox.margin>
-                                    </Separator>
-                                    <VBox spacing="2.0" prefWidth="120.0">
-                                        <children>
-                                            <Label text="CHECK-IN" textFill="#888888"><font><Font name="System Bold" size="10.0"/></font></Label>
-                                            <Label fx:id="summaryCheckInLabel" text="--" textFill="#333333"><font><Font size="13.0"/></font></Label>
-                                        </children>
-                                    </VBox>
-                                    <Separator orientation="VERTICAL" style="-fx-background-color: #e0e8f0;">
-                                        <HBox.margin><Insets left="16.0" right="16.0"/></HBox.margin>
-                                    </Separator>
-                                    <VBox spacing="2.0" prefWidth="120.0">
-                                        <children>
-                                            <Label text="CHECK-OUT" textFill="#888888"><font><Font name="System Bold" size="10.0"/></font></Label>
-                                            <Label fx:id="summaryCheckOutLabel" text="--" textFill="#333333"><font><Font size="13.0"/></font></Label>
-                                        </children>
-                                    </VBox>
-                                    <Separator orientation="VERTICAL" style="-fx-background-color: #e0e8f0;">
-                                        <HBox.margin><Insets left="16.0" right="16.0"/></HBox.margin>
-                                    </Separator>
-                                    <VBox spacing="2.0" alignment="CENTER">
-                                        <children>
-                                            <Label text="NIGHTS" textFill="#888888"><font><Font name="System Bold" size="10.0"/></font></Label>
-                                            <Label fx:id="summaryNightsLabel" text="--" textFill="#005b96"><font><Font name="System Bold" size="28.0"/></font></Label>
-                                        </children>
-                                    </VBox>
-                                </children>
-                            </HBox>
+                </TableView>
 
-                            <HBox fx:id="billingMainArea" spacing="20.0" visible="false" managed="false"
-                                  alignment="TOP_LEFT">
-                                <children>
-
-                                    <VBox spacing="0.0" HBox.hgrow="ALWAYS"
-                                          style="-fx-background-color: #ffffff; -fx-background-radius: 14;
-                                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
-                                        <padding><Insets top="24.0" bottom="24.0" left="24.0" right="24.0"/></padding>
-                                        <children>
-
-                                            <Label text="Bill Breakdown" textFill="#333333">
-                                                <font><Font name="System Bold" size="15.0"/></font>
-                                            </Label>
-                                            <Separator style="-fx-background-color: #e0e8f0;">
-                                                <VBox.margin><Insets top="12.0" bottom="16.0"/></VBox.margin>
-                                            </Separator>
-
-                                            <HBox alignment="CENTER_LEFT">
-                                                <VBox.margin><Insets bottom="14.0"/></VBox.margin>
-                                                <children>
-                                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                                        <children>
-                                                            <Label text="Room Charges" textFill="#333333">
-                                                                <font><Font size="13.0"/></font>
-                                                            </Label>
-                                                            <Label fx:id="roomChargesDescLabel" text="-- nights x LKR --" textFill="#888888">
-                                                                <font><Font size="11.0"/></font>
-                                                            </Label>
-                                                        </children>
-                                                    </VBox>
-                                                    <Label fx:id="roomChargesAmountLabel" text="LKR --" textFill="#333333">
-                                                        <font><Font name="System Bold" size="14.0"/></font>
-                                                    </Label>
-                                                </children>
-                                            </HBox>
-                                            <Separator style="-fx-background-color: #f4f6f8;">
-                                                <VBox.margin><Insets bottom="14.0"/></VBox.margin>
-                                            </Separator>
-
-                                            <HBox alignment="CENTER_LEFT">
-                                                <VBox.margin><Insets bottom="14.0"/></VBox.margin>
-                                                <children>
-                                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                                        <children>
-                                                            <Label text="Extra Charges" textFill="#333333">
-                                                                <font><Font size="13.0"/></font>
-                                                            </Label>
-                                                            <Label text="Room service, minibar, laundry, etc." textFill="#888888">
-                                                                <font><Font size="11.0"/></font>
-                                                            </Label>
-                                                        </children>
-                                                    </VBox>
-                                                    <HBox spacing="6.0" alignment="CENTER_RIGHT">
-                                                        <children>
-                                                            <Label text="LKR" textFill="#555555"><font><Font size="12.0"/></font></Label>
-                                                            <TextField fx:id="extraChargesField"
-                                                                       prefHeight="36.0" prefWidth="110.0"
-                                                                       promptText="0.00"
-                                                                       style="-fx-background-radius: 10; -fx-border-color: #005b96; -fx-border-radius: 10; -fx-alignment: CENTER_RIGHT;"/>
-                                                        </children>
-                                                    </HBox>
-                                                </children>
-                                            </HBox>
-                                            <Separator style="-fx-background-color: #f4f6f8;">
-                                                <VBox.margin><Insets bottom="14.0"/></VBox.margin>
-                                            </Separator>
-
-                                            <HBox alignment="CENTER_LEFT">
-                                                <VBox.margin><Insets bottom="14.0"/></VBox.margin>
-                                                <children>
-                                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                                        <children>
-                                                            <Label text="Discount" textFill="#333333">
-                                                                <font><Font size="13.0"/></font>
-                                                            </Label>
-                                                            <Label text="Loyalty, promotional or staff discount" textFill="#888888">
-                                                                <font><Font size="11.0"/></font>
-                                                            </Label>
-                                                        </children>
-                                                    </VBox>
-                                                    <HBox spacing="6.0" alignment="CENTER_RIGHT">
-                                                        <children>
-                                                            <TextField fx:id="discountField"
-                                                                       prefHeight="36.0" prefWidth="80.0"
-                                                                       promptText="0"
-                                                                       style="-fx-background-radius: 10; -fx-border-color: #005b96; -fx-border-radius: 10; -fx-alignment: CENTER_RIGHT;"/>
-                                                            <Label text="\%" textFill="#555555"><font><Font size="13.0"/></font></Label>
-                                                        </children>
-                                                    </HBox>
-                                                </children>
-                                            </HBox>
-                                            <Separator style="-fx-background-color: #f4f6f8;">
-                                                <VBox.margin><Insets bottom="14.0"/></VBox.margin>
-                                            </Separator>
-
-                                            <HBox alignment="CENTER_LEFT">
-                                                <VBox.margin><Insets bottom="20.0"/></VBox.margin>
-                                                <children>
-                                                    <VBox spacing="2.0" HBox.hgrow="ALWAYS">
-                                                        <children>
-                                                            <Label text="Tax / VAT" textFill="#333333">
-                                                                <font><Font size="13.0"/></font>
-                                                            </Label>
-                                                            <Label fx:id="taxDescLabel" text="-- percent on subtotal" textFill="#888888">
-                                                                <font><Font size="11.0"/></font>
-                                                            </Label>
-                                                        </children>
-                                                    </VBox>
-                                                    <Label fx:id="taxAmountLabel" text="LKR --" textFill="#333333">
-                                                        <font><Font size="13.0"/></font>
-                                                    </Label>
-                                                </children>
-                                            </HBox>
-
-                                            <Separator style="-fx-background-color: #e0e8f0;">
-                                                <VBox.margin><Insets bottom="16.0"/></VBox.margin>
-                                            </Separator>
-
-                                            <HBox alignment="CENTER_RIGHT">
-                                                <children>
-                                                    <Button fx:id="recalculateBtn" mnemonicParsing="false"
-                                                            onAction="#handleRecalculate"
-                                                            prefHeight="38.0" prefWidth="150.0" text="Recalculate"
-                                                            style="-fx-background-color: transparent; -fx-text-fill: #005b96; -fx-border-color: #005b96; -fx-border-radius: 20; -fx-background-radius: 20; -fx-cursor: hand;">
-                                                        <font><Font size="12.0"/></font>
-                                                    </Button>
-                                                </children>
-                                            </HBox>
-
-                                        </children>
-                                    </VBox>
-
-                                    <VBox spacing="16.0" prefWidth="310.0">
-                                        <children>
-
-                                            <VBox spacing="12.0"
-                                                  style="-fx-background-color: linear-gradient(to bottom, #016a8a, #005b96); -fx-background-radius: 14;
-                                                         -fx-effect: dropshadow(gaussian, rgba(0,91,150,0.4), 14, 0, 0, 5);">
-                                                <padding><Insets top="22.0" bottom="22.0" left="22.0" right="22.0"/></padding>
-                                                <children>
-                                                    <Label text="TOTAL AMOUNT DUE" textFill="rgba(255,255,255,0.7)">
-                                                        <font><Font name="System Bold" size="10.0"/></font>
-                                                    </Label>
-                                                    <Label fx:id="grandTotalLabel" text="LKR 0.00" textFill="WHITE">
-                                                        <font><Font name="System Bold" size="32.0"/></font>
-                                                    </Label>
-                                                    <Separator style="-fx-background-color: rgba(255,255,255,0.25);"/>
-                                                    <HBox alignment="CENTER_LEFT">
-                                                        <children>
-                                                            <Label text="Room Charges" textFill="rgba(255,255,255,0.7)" HBox.hgrow="ALWAYS"><font><Font size="12.0"/></font></Label>
-                                                            <Label fx:id="totalRoomChargesLabel" text="LKR --" textFill="WHITE"><font><Font size="12.0"/></font></Label>
-                                                        </children>
-                                                    </HBox>
-                                                    <HBox alignment="CENTER_LEFT">
-                                                        <children>
-                                                            <Label text="Extra Charges" textFill="rgba(255,255,255,0.7)" HBox.hgrow="ALWAYS"><font><Font size="12.0"/></font></Label>
-                                                            <Label fx:id="totalExtrasLabel" text="LKR --" textFill="WHITE"><font><Font size="12.0"/></font></Label>
-                                                        </children>
-                                                    </HBox>
-                                                    <HBox alignment="CENTER_LEFT">
-                                                        <children>
-                                                            <Label text="Discount" textFill="rgba(255,255,255,0.7)" HBox.hgrow="ALWAYS"><font><Font size="12.0"/></font></Label>
-                                                            <Label fx:id="totalDiscountLabel" text="- LKR --" textFill="#a5d6a7"><font><Font size="12.0"/></font></Label>
-                                                        </children>
-                                                    </HBox>
-                                                    <HBox alignment="CENTER_LEFT">
-                                                        <children>
-                                                            <Label text="VAT" textFill="rgba(255,255,255,0.7)" HBox.hgrow="ALWAYS"><font><Font size="12.0"/></font></Label>
-                                                            <Label fx:id="totalVatLabel" text="LKR --" textFill="WHITE"><font><Font size="12.0"/></font></Label>
-                                                        </children>
-                                                    </HBox>
-                                                </children>
-                                            </VBox>
-
-                                            <VBox spacing="14.0"
-                                                  style="-fx-background-color: #ffffff; -fx-background-radius: 14;
-                                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
-                                                <padding><Insets top="22.0" bottom="22.0" left="22.0" right="22.0"/></padding>
-                                                <children>
-                                                    <Label text="Payment" textFill="#333333">
-                                                        <font><Font name="System Bold" size="14.0"/></font>
-                                                    </Label>
-                                                    <Separator style="-fx-background-color: #e0e8f0;"/>
-
-                                                    <VBox spacing="5.0">
-                                                        <children>
-                                                            <Label text="Payment Method" textFill="#666666"><font><Font size="12.0"/></font></Label>
-                                                            <ComboBox fx:id="paymentMethodComboBox"
-                                                                      prefHeight="40.0" prefWidth="9999.0"
-                                                                      promptText="Select method"
-                                                                      style="-fx-background-radius: 20; -fx-border-color: #005b96; -fx-border-radius: 20;"/>
-                                                        </children>
-                                                    </VBox>
-
-                                                    <VBox spacing="5.0">
-                                                        <children>
-                                                            <Label text="Payment Status" textFill="#666666"><font><Font size="12.0"/></font></Label>
-                                                            <ComboBox fx:id="paymentStatusComboBox"
-                                                                      prefHeight="40.0" prefWidth="9999.0"
-                                                                      promptText="Select status"
-                                                                      style="-fx-background-radius: 20; -fx-border-color: #005b96; -fx-border-radius: 20;"/>
-                                                        </children>
-                                                    </VBox>
-
-                                                    <VBox spacing="5.0">
-                                                        <children>
-                                                            <Label text="Notes (Optional)" textFill="#666666"><font><Font size="12.0"/></font></Label>
-                                                            <TextField fx:id="paymentNotesField"
-                                                                       prefHeight="40.0"
-                                                                       promptText="e.g. Cash paid at front desk"
-                                                                       style="-fx-background-radius: 20; -fx-border-color: #005b96; -fx-border-radius: 20;"/>
-                                                        </children>
-                                                    </VBox>
-
-                                                    <Label fx:id="paymentErrorLabel" text="" textFill="#d32f2f" wrapText="true">
-                                                        <font><Font size="11.0"/></font>
-                                                    </Label>
-
-                                                    <Button fx:id="confirmPaymentBtn" mnemonicParsing="false"
-                                                            onAction="#handleConfirmPayment"
-                                                            prefHeight="42.0" prefWidth="9999.0"
-                                                            text="Confirm Payment"
-                                                            style="-fx-background-color: #005b96; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;">
-                                                        <font><Font name="System Bold" size="13.0"/></font>
-                                                    </Button>
-
-                                                    <Button fx:id="printBillBtn" mnemonicParsing="false"
-                                                            onAction="#handlePrintBill"
-                                                            prefHeight="42.0" prefWidth="9999.0"
-                                                            text="Print Bill"
-                                                            style="-fx-background-color: transparent; -fx-text-fill: #005b96; -fx-border-color: #005b96; -fx-border-radius: 20; -fx-background-radius: 20; -fx-cursor: hand;">
-                                                        <font><Font size="13.0"/></font>
-                                                    </Button>
-                                                </children>
-                                            </VBox>
-
-                                        </children>
-                                    </VBox>
-
-                                </children>
-                            </HBox>
-
-                            <VBox fx:id="placeholderBox" alignment="CENTER" spacing="14.0" prefHeight="260.0"
-                                  style="-fx-background-color: #ffffff; -fx-background-radius: 14;
-                                         -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
-                                <padding><Insets top="50.0" bottom="50.0" left="30.0" right="30.0"/></padding>
-                                <children>
-                                    <Label text="No reservation loaded" textFill="#aaaaaa">
-                                        <font><Font name="System Bold" size="16.0"/></font>
-                                    </Label>
-                                    <Label text="Enter a reservation number above and click Load Bill to view and calculate charges."
-                                           textFill="#cccccc" wrapText="true" style="-fx-text-alignment: center;" prefWidth="400.0">
-                                        <font><Font size="12.0"/></font>
-                                    </Label>
-                                </children>
-                            </VBox>
-
-                        </children>
-                    </VBox>
-                </content>
-            </ScrollPane>
+            </children>
         </VBox>
     </center>
 
