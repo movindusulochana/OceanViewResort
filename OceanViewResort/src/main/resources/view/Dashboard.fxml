@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.effect.DropShadow?>
+
+<BorderPane prefHeight="650.0" prefWidth="1100.0"
+            xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controller.DashboardController">
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  LEFT SIDEBAR                                           -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <left>
+        <VBox prefWidth="240.0" prefHeight="650.0" spacing="0.0"
+              style="-fx-background-color: linear-gradient(to bottom, #016a8a, #005b96);">
+
+            <!-- Logo + Resort Name -->
+            <VBox alignment="CENTER" spacing="12.0">
+                <padding><Insets top="30.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                <children>
+                    <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
+                                minHeight="-Infinity" minWidth="-Infinity"
+                                prefHeight="90.0" prefWidth="90.0">
+                        <children>
+                            <ImageView fx:id="sidebarLogoView" fitHeight="90.0" fitWidth="90.0"
+                                       pickOnBounds="true" preserveRatio="true">
+                                <image>
+                                    <Image url="@../resource/icon.jpeg" />
+                                </image>
+                                <clip>
+                                    <Circle centerX="45.0" centerY="45.0" radius="45.0" />
+                                </clip>
+                                <effect>
+                                    <DropShadow color="#003366" radius="8" offsetX="2" offsetY="2"/>
+                                </effect>
+                            </ImageView>
+                        </children>
+                    </AnchorPane>
+
+                    <Label text="OCEAN VIEW" textFill="WHITE">
+                        <font><Font name="System Bold" size="18.0" /></font>
+                    </Label>
+                    <Label text="RESORT" textFill="WHITE">
+                        <font><Font size="13.0" /></font>
+                    </Label>
+                </children>
+            </VBox>
+
+            <!-- Divider -->
+            <Separator style="-fx-background-color: rgba(255,255,255,0.3);">
+                <padding><Insets left="20.0" right="20.0"/></padding>
+            </Separator>
+
+            <!-- Navigation Menu -->
+            <VBox spacing="5.0" VBox.vgrow="ALWAYS">
+                <padding><Insets top="20.0" left="15.0" right="15.0"/></padding>
+                <children>
+
+                    <Label text="MAIN MENU" textFill="rgba(255,255,255,0.6)">
+                        <font><Font name="System Bold" size="10.0" /></font>
+                        <padding><Insets left="10.0" bottom="5.0"/></padding>
+                    </Label>
+
+                    <!-- Dashboard (active) -->
+                    <Button fx:id="navDashboardBtn"
+                            mnemonicParsing="false"
+                            onAction="#showDashboard"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  🏠   Dashboard"
+                            style="-fx-background-color: rgba(255,255,255,0.25); -fx-text-fill: white; -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Button>
+
+                    <!-- New Reservation -->
+                    <Button fx:id="navNewReservationBtn"
+                            mnemonicParsing="false"
+                            onAction="#showNewReservation"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  ➕   New Reservation"
+                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font size="13.0" /></font>
+                    </Button>
+
+                    <!-- View Reservations -->
+                    <Button fx:id="navViewReservationsBtn"
+                            mnemonicParsing="false"
+                            onAction="#showViewReservations"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  📋   View Reservations"
+                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font size="13.0" /></font>
+                    </Button>
+
+                    <!-- Calculate Bill -->
+                    <Button fx:id="navBillingBtn"
+                            mnemonicParsing="false"
+                            onAction="#showBilling"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  💳   Billing"
+                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font size="13.0" /></font>
+                    </Button>
+
+                    <!-- Guest Management -->
+                    <Button fx:id="navGuestsBtn"
+                            mnemonicParsing="false"
+                            onAction="#showGuests"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  👤   Guest Management"
+                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font size="13.0" /></font>
+                    </Button>
+
+                    <Label text="SYSTEM" textFill="rgba(255,255,255,0.6)">
+                        <font><Font name="System Bold" size="10.0" /></font>
+                        <padding><Insets left="10.0" top="15.0" bottom="5.0"/></padding>
+                    </Label>
+
+                    <!-- Help -->
+                    <Button fx:id="navHelpBtn"
+                            mnemonicParsing="false"
+                            onAction="#showHelp"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  ❓   Help"
+                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font size="13.0" /></font>
+                    </Button>
+
+                    <!-- Logout -->
+                    <Button fx:id="navLogoutBtn"
+                            mnemonicParsing="false"
+                            onAction="#handleLogout"
+                            prefHeight="42.0" prefWidth="210.0"
+                            text="  🚪   Logout"
+                            style="-fx-background-color: transparent; -fx-text-fill: rgba(255,255,255,0.85); -fx-background-radius: 10; -fx-cursor: hand; -fx-alignment: CENTER_LEFT;">
+                        <font><Font size="13.0" /></font>
+                    </Button>
+
+                </children>
+            </VBox>
+
+            <!-- Logged-in user info at bottom -->
+            <VBox alignment="CENTER_LEFT" style="-fx-background-color: rgba(0,0,0,0.2); -fx-background-radius: 10;">
+                <padding><Insets top="12.0" bottom="12.0" left="15.0" right="15.0"/></padding>
+                <VBox.margin><Insets bottom="15.0" left="15.0" right="15.0"/></VBox.margin>
+                <children>
+                    <Label text="Logged in as" textFill="rgba(255,255,255,0.6)">
+                        <font><Font size="10.0" /></font>
+                    </Label>
+                    <Label fx:id="loggedInUserLabel" text="Staff Member" textFill="WHITE">
+                        <font><Font name="System Bold" size="13.0" /></font>
+                    </Label>
+                </children>
+            </VBox>
+
+        </VBox>
+    </left>
+
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <!--  MAIN CONTENT AREA                                      -->
+    <!-- ═══════════════════════════════════════════════════════ -->
+    <center>
+        <VBox spacing="0.0" style="-fx-background-color: #f0f4f8;">
+
+            <!-- Top Header Bar -->
+            <HBox prefHeight="65.0" alignment="CENTER_LEFT" spacing="15.0"
+                  style="-fx-background-color: #ffffff; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.08), 6, 0, 0, 2);">
+                <padding><Insets left="30.0" right="30.0"/></padding>
+                <children>
+                    <Label fx:id="pageTitle" text="Dashboard" textFill="#333333">
+                        <font><Font name="System Bold" size="20.0" /></font>
+                    </Label>
+
+                    <!-- Spacer -->
+                    <HBox HBox.hgrow="ALWAYS" />
+
+                    <Label fx:id="currentDateLabel" text="03 March 2026" textFill="#888888">
+                        <font><Font size="13.0" /></font>
+                    </Label>
+                </children>
+            </HBox>
+
+            <!-- Scrollable Content -->
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS"
+                        style="-fx-background-color: transparent; -fx-background: transparent;">
+                <content>
+                    <VBox spacing="25.0">
+                        <padding><Insets top="25.0" bottom="25.0" left="25.0" right="25.0"/></padding>
+                        <children>
+
+                            <!-- ── STATS CARDS ROW ── -->
+                            <HBox spacing="20.0">
+                                <children>
+
+                                    <!-- Total Reservations -->
+                                    <VBox prefWidth="185.0" prefHeight="110.0" spacing="8.0" alignment="CENTER_LEFT"
+                                          style="-fx-background-color: #ffffff; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
+                                        <padding><Insets top="20.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                                        <children>
+                                            <Label text="📋  Total Reservations" textFill="#888888">
+                                                <font><Font size="11.0" /></font>
+                                            </Label>
+                                            <Label fx:id="totalReservationsLabel" text="0" textFill="#005b96">
+                                                <font><Font name="System Bold" size="32.0" /></font>
+                                            </Label>
+                                        </children>
+                                    </VBox>
+
+                                    <!-- Checked In -->
+                                    <VBox prefWidth="185.0" prefHeight="110.0" spacing="8.0" alignment="CENTER_LEFT"
+                                          style="-fx-background-color: #ffffff; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
+                                        <padding><Insets top="20.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                                        <children>
+                                            <Label text="✅  Checked In" textFill="#888888">
+                                                <font><Font size="11.0" /></font>
+                                            </Label>
+                                            <Label fx:id="checkedInLabel" text="0" textFill="#2e7d32">
+                                                <font><Font name="System Bold" size="32.0" /></font>
+                                            </Label>
+                                        </children>
+                                    </VBox>
+
+                                    <!-- Available Rooms -->
+                                    <VBox prefWidth="185.0" prefHeight="110.0" spacing="8.0" alignment="CENTER_LEFT"
+                                          style="-fx-background-color: #ffffff; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
+                                        <padding><Insets top="20.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                                        <children>
+                                            <Label text="🛏   Available Rooms" textFill="#888888">
+                                                <font><Font size="11.0" /></font>
+                                            </Label>
+                                            <Label fx:id="availableRoomsLabel" text="0" textFill="#016a8a">
+                                                <font><Font name="System Bold" size="32.0" /></font>
+                                            </Label>
+                                        </children>
+                                    </VBox>
+
+                                    <!-- Pending Bills -->
+                                    <VBox prefWidth="185.0" prefHeight="110.0" spacing="8.0" alignment="CENTER_LEFT"
+                                          style="-fx-background-color: #ffffff; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
+                                        <padding><Insets top="20.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                                        <children>
+                                            <Label text="💳  Pending Bills" textFill="#888888">
+                                                <font><Font size="11.0" /></font>
+                                            </Label>
+                                            <Label fx:id="pendingBillsLabel" text="0" textFill="#c62828">
+                                                <font><Font name="System Bold" size="32.0" /></font>
+                                            </Label>
+                                        </children>
+                                    </VBox>
+
+                                </children>
+                            </HBox>
+
+                            <!-- ── QUICK ACTIONS ── -->
+                            <VBox spacing="12.0"
+                                  style="-fx-background-color: #ffffff; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
+                                <padding><Insets top="20.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                                <children>
+                                    <Label text="Quick Actions" textFill="#333333">
+                                        <font><Font name="System Bold" size="15.0" /></font>
+                                    </Label>
+                                    <HBox spacing="12.0">
+                                        <children>
+                                            <Button fx:id="quickNewReservationBtn"
+                                                    mnemonicParsing="false"
+                                                    onAction="#showNewReservation"
+                                                    prefHeight="40.0" prefWidth="180.0"
+                                                    text="➕  New Reservation"
+                                                    style="-fx-background-color: #005b96; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;">
+                                                <font><Font name="System Bold" size="12.0" /></font>
+                                            </Button>
+                                            <Button fx:id="quickViewReservationsBtn"
+                                                    mnemonicParsing="false"
+                                                    onAction="#showViewReservations"
+                                                    prefHeight="40.0" prefWidth="180.0"
+                                                    text="📋  View Reservations"
+                                                    style="-fx-background-color: #016a8a; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;">
+                                                <font><Font name="System Bold" size="12.0" /></font>
+                                            </Button>
+                                            <Button fx:id="quickBillingBtn"
+                                                    mnemonicParsing="false"
+                                                    onAction="#showBilling"
+                                                    prefHeight="40.0" prefWidth="180.0"
+                                                    text="💳  Calculate Bill"
+                                                    style="-fx-background-color: #005b96; -fx-text-fill: white; -fx-background-radius: 20; -fx-cursor: hand;">
+                                                <font><Font name="System Bold" size="12.0" /></font>
+                                            </Button>
+                                            <Button fx:id="quickHelpBtn"
+                                                    mnemonicParsing="false"
+                                                    onAction="#showHelp"
+                                                    prefHeight="40.0" prefWidth="130.0"
+                                                    text="❓  Help"
+                                                    style="-fx-background-color: transparent; -fx-text-fill: #005b96; -fx-border-color: #005b96; -fx-border-radius: 20; -fx-background-radius: 20; -fx-cursor: hand;">
+                                                <font><Font name="System Bold" size="12.0" /></font>
+                                            </Button>
+                                        </children>
+                                    </HBox>
+                                </children>
+                            </VBox>
+
+                            <!-- ── RECENT RESERVATIONS ── -->
+                            <VBox spacing="12.0"
+                                  style="-fx-background-color: #ffffff; -fx-background-radius: 14; -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.07), 8, 0, 0, 2);">
+                                <padding><Insets top="20.0" bottom="20.0" left="20.0" right="20.0"/></padding>
+                                <children>
+                                    <HBox alignment="CENTER_LEFT">
+                                        <children>
+                                            <Label text="Recent Reservations" textFill="#333333">
+                                                <font><Font name="System Bold" size="15.0" /></font>
+                                            </Label>
+                                            <HBox HBox.hgrow="ALWAYS"/>
+                                            <Button fx:id="viewAllBtn"
+                                                    mnemonicParsing="false"
+                                                    onAction="#showViewReservations"
+                                                    text="View All →"
+                                                    style="-fx-background-color: transparent; -fx-text-fill: #005b96; -fx-cursor: hand;">
+                                                <font><Font size="12.0" /></font>
+                                            </Button>
+                                        </children>
+                                    </HBox>
+
+                                    <!-- Table Header -->
+                                    <HBox prefHeight="36.0" spacing="0.0"
+                                          style="-fx-background-color: #f0f4f8; -fx-background-radius: 8;">
+                                        <padding><Insets left="12.0" right="12.0"/></padding>
+                                        <children>
+                                            <Label text="Res. No." textFill="#555555" prefWidth="90.0">
+                                                <font><Font name="System Bold" size="11.0" /></font>
+                                            </Label>
+                                            <Label text="Guest Name" textFill="#555555" prefWidth="160.0">
+                                                <font><Font name="System Bold" size="11.0" /></font>
+                                            </Label>
+                                            <Label text="Room Type" textFill="#555555" prefWidth="110.0">
+                                                <font><Font name="System Bold" size="11.0" /></font>
+                                            </Label>
+                                            <Label text="Check-In" textFill="#555555" prefWidth="110.0">
+                                                <font><Font name="System Bold" size="11.0" /></font>
+                                            </Label>
+                                            <Label text="Check-Out" textFill="#555555" prefWidth="110.0">
+                                                <font><Font name="System Bold" size="11.0" /></font>
+                                            </Label>
+                                            <Label text="Status" textFill="#555555" prefWidth="90.0">
+                                                <font><Font name="System Bold" size="11.0" /></font>
+                                            </Label>
+                                        </children>
+                                    </HBox>
+
+                                    <!-- Placeholder row (populated via controller) -->
+                                    <Label fx:id="noReservationsLabel"
+                                           text="No recent reservations found."
+                                           textFill="#aaaaaa">
+                                        <font><Font size="12.0" /></font>
+                                        <padding><Insets top="10.0" left="12.0"/></padding>
+                                    </Label>
+
+                                    <!-- fx:id for dynamic table rows injected by controller -->
+                                    <VBox fx:id="reservationsTableContainer" spacing="2.0"/>
+
+                                </children>
+                            </VBox>
+
+                        </children>
+                    </VBox>
+                </content>
+            </ScrollPane>
+
+        </VBox>
+    </center>
+
+</BorderPane>
