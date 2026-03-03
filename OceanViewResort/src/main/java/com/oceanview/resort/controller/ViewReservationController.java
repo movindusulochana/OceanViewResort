@@ -10,12 +10,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -28,55 +28,55 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
-/**
- * Task 3: Display Reservation Details.
- * This controller manages the searchable list of bookings and 
- * the interactive right-side detail panel.
- */
 public class ViewReservationController implements Initializable {
 
-    // Table Container and Search
+    // FXML Table Elements
     @FXML private VBox reservationsTableContainer;
     @FXML private VBox emptyStateBox;
     @FXML private TextField searchField;
+    @FXML private ComboBox<String> filterRoomTypeComboBox;
+    @FXML private ComboBox<String> filterStatusComboBox;
     @FXML private Label resultsCountLabel;
 
-    // Detail Panel Components
+    // FXML Detail Panel Elements
     @FXML private VBox detailPanel;
     @FXML private Label detailResNoLabel, detailGuestNameLabel, detailAddressLabel, detailContactLabel;
     @FXML private Label detailRoomTypeLabel, detailCheckInLabel, detailCheckOutLabel;
-    @FXML private Label detailNightsLabel, detailStatusLabel, detailTotalLabel, detailSpecialRequestsLabel;
+    @FXML private Label detailNightsLabel, detailStatusLabel, detailTotalLabel;
 
-    // Header Components
+    // FXML Header Elements
     @FXML private Label currentDateLabel;
 
     private final ReservationDAO reservationDAO = new ReservationDAO();
     private final GuestDAO guestDAO = new GuestDAO();
     private final RoomDAO roomDAO = new RoomDAO();
-    
     private List<Reservation> allReservations;
-    private Reservation selectedReservation;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        currentDateLabel.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
-        refreshData();
+        // Set header date
+        if (currentDateLabel != null) {
+            currentDateLabel.setText(LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMMM yyyy")));
+        }
+
+        // Setup Dropdowns
+        filterRoomTypeComboBox.getItems().addAll("All Types", "Single", "Double", "Suite", "Deluxe");
+        filterStatusComboBox.getItems().addAll("All Statuses", "Confirmed", "Checked-In", "Checked-Out");
+
+        refreshTable();
     }
 
     /**
-     * Fetches fresh data from the DB and renders the custom table rows.
+     * Loads data from DB and renders rows
      */
-    private void refreshData() {
+    private void refreshTable() {
         allReservations = reservationDAO.getAllReservations();
-        renderRows(allReservations);
+        renderReservationRows(allReservations);
     }
 
-    /**
-     * Dynamically generates HBox rows for the VBox table container.
-     */
-    private void renderRows(List<Reservation> list) {
+    private void renderReservationRows(List<Reservation> list) {
         reservationsTableContainer.getChildren().clear();
-        
+
         if (list.isEmpty()) {
             emptyStateBox.setVisible(true);
             emptyStateBox.setManaged(true);
@@ -91,131 +91,104 @@ public class ViewReservationController implements Initializable {
             HBox row = createDataRow(res);
             reservationsTableContainer.getChildren().add(row);
         }
-        
         resultsCountLabel.setText("Showing " + list.size() + " reservations");
     }
 
     private HBox createDataRow(Reservation res) {
         HBox row = new HBox();
-        row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-        row.setPrefHeight(50);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.setPrefHeight(48);
         row.setStyle("-fx-background-color: white; -fx-border-color: #f0f4f8; -fx-border-width: 0 0 1 0; -fx-cursor: hand;");
         row.setPadding(new javafx.geometry.Insets(0, 12, 0, 12));
 
-        // Column Data
-        Label resNo = createCell("#" + res.getReservationNumber(), 90);
-        Label guest = createCell("Guest ID: " + res.getGuestId(), 160);
-        Label contact = createCell("Room " + res.getRoomNumber(), 130);
-        Label roomType = createCell("Check-In:", 110); // Simple placeholder
-        Label checkIn = createCell(res.getCheckInDate().toString(), 100);
-        Label checkOut = createCell(res.getCheckOutDate().toString(), 100);
-        Label status = createCell(res.getStatus(), 90);
-        
-        Button viewBtn = new Button("View Details");
-        viewBtn.setStyle("-fx-background-color: #e8f0fe; -fx-text-fill: #005b96; -fx-background-radius: 15; -fx-font-size: 10px; -fx-cursor: hand;");
-        viewBtn.setOnAction(e -> showDetailPanel(res));
+        row.getChildren().addAll(
+            createLabel("#" + res.getReservationNumber(), 90),
+            createLabel("ID: " + res.getGuestId(), 160),
+            createLabel("Room " + res.getRoomNumber(), 130),
+            createLabel(res.getCheckInDate().toString(), 110),
+            createLabel(res.getCheckOutDate().toString(), 110),
+            createLabel(res.getStatus(), 110)
+        );
 
-        row.getChildren().addAll(resNo, guest, contact, roomType, checkIn, checkOut, status, viewBtn);
-        
-        // Hover Effect
-        row.setOnMouseEntered(e -> row.setStyle("-fx-background-color: #f8fbff; -fx-border-color: #f0f4f8; -fx-border-width: 0 0 1 0; -fx-cursor: hand;"));
-        row.setOnMouseExited(e -> row.setStyle("-fx-background-color: white; -fx-border-color: #f0f4f8; -fx-border-width: 0 0 1 0; -fx-cursor: hand;"));
-        row.setOnMouseClicked(e -> showDetailPanel(res));
+        Button viewBtn = new Button("View Detail");
+        viewBtn.setOnAction(e -> showReservationDetails(res));
+        row.getChildren().add(viewBtn);
 
         return row;
     }
 
-    private Label createCell(String text, double width) {
+    private Label createLabel(String text, double width) {
         Label l = new Label(text);
         l.setPrefWidth(width);
-        l.setStyle("-fx-text-fill: #555555; -fx-font-size: 12px;");
+        l.setStyle("-fx-font-size: 12px; -fx-text-fill: #555555;");
         return l;
     }
 
     /**
-     * Fills the right panel with complete data when a row is clicked.
+     * Task 3: Shows full details when a row is clicked
      */
-    private void showDetailPanel(Reservation res) {
-        this.selectedReservation = res;
-        Guest guest = guestDAO.getGuestById(res.getGuestId());
-        Room room = roomDAO.getRoomByNumber(res.getRoomNumber());
+    private void showReservationDetails(Reservation res) {
+        detailPanel.setVisible(true);
+        detailPanel.setManaged(true);
+
+        Guest g = guestDAO.getGuestById(res.getGuestId());
+        Room rm = roomDAO.getRoomByNumber(res.getRoomNumber());
 
         detailResNoLabel.setText("RES-" + String.format("%04d", res.getReservationNumber()));
-        detailGuestNameLabel.setText(guest != null ? guest.getName() : "Unknown");
-        detailAddressLabel.setText(guest != null ? guest.getAddress() : "--");
-        detailContactLabel.setText(guest != null ? guest.getContactNumber() : "--");
-        
-        detailRoomTypeLabel.setText(room != null ? room.getRoomType() : "Standard");
+        detailGuestNameLabel.setText(g != null ? g.getName() : "Unknown");
+        detailAddressLabel.setText(g != null ? g.getAddress() : "--");
+        detailContactLabel.setText(g != null ? g.getContactNumber() : "--");
+
+        detailRoomTypeLabel.setText(rm != null ? rm.getRoomType() : "Standard");
         detailCheckInLabel.setText(res.getCheckInDate().toString());
         detailCheckOutLabel.setText(res.getCheckOutDate().toString());
-        
+
         long nights = ChronoUnit.DAYS.between(res.getCheckInDate(), res.getCheckOutDate());
         detailNightsLabel.setText(String.valueOf(nights));
         detailStatusLabel.setText(res.getStatus());
-        detailTotalLabel.setText("LKR " + String.format("%,.2f", res.getTotalBill()));
-        
-        detailPanel.setVisible(true);
+        detailTotalLabel.setText("Rs. " + String.format("%,.2f", res.getTotalBill()));
     }
 
-    @FXML
-    private void handleSearch(ActionEvent event) {
-        String query = searchField.getText().toLowerCase();
+    @FXML private void handleSearch(ActionEvent event) {
+        String q = searchField.getText().toLowerCase();
         List<Reservation> filtered = allReservations.stream()
-                .filter(r -> String.valueOf(r.getReservationNumber()).contains(query) || 
-                             String.valueOf(r.getGuestId()).contains(query))
+                .filter(r -> String.valueOf(r.getReservationNumber()).contains(q) || 
+                             String.valueOf(r.getGuestId()).contains(q))
                 .collect(Collectors.toList());
-        renderRows(filtered);
+        renderReservationRows(filtered);
     }
 
-    @FXML
-    private void handleClearSearch(ActionEvent event) {
+    @FXML private void handleClearSearch(ActionEvent event) {
         searchField.clear();
-        renderRows(allReservations);
+        refreshTable();
     }
 
-    @FXML
-    private void handleCloseDetailPanel(ActionEvent event) {
-        detailPanel.setVisible(false);
-    }
-
-    @FXML
-    private void handleDetailCalculateBill(ActionEvent event) {
-        // Task 4: Jump to Billing with this reservation loaded
-        navigate(event, "/view/billing.fxml");
-    }
-
-    @FXML
-    private void handleDetailDelete(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Delete this reservation?", ButtonType.YES, ButtonType.NO);
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.YES) {
-                // Logic: reservationDAO.delete(selectedReservation.getId());
-                refreshData();
-                detailPanel.setVisible(false);
-            }
-        });
-    }
-
-    @FXML private void handleDetailEdit(ActionEvent event) { System.out.println("Edit clicked"); }
+    @FXML private void handleCloseDetailPanel() { detailPanel.setVisible(false); detailPanel.setManaged(false); }
 
     // Navigation Methods
     @FXML private void goToDashboard(ActionEvent event) { navigate(event, "/view/Dashboard.fxml"); }
     @FXML private void showNewReservation(ActionEvent event) { navigate(event, "/view/NewReservation.fxml"); }
-    @FXML private void showViewReservations(ActionEvent event) { refreshData(); }
+    @FXML private void showViewReservations(ActionEvent event) { refreshTable(); }
     @FXML private void showBilling(ActionEvent event) { navigate(event, "/view/billing.fxml"); }
     @FXML private void showGuests(ActionEvent event) { navigate(event, "/view/guest_management.fxml"); }
-    @FXML private void showHelp(ActionEvent event) { System.out.println("Help..."); }
+    @FXML private void showHelp() { System.out.println("Guidelines opened."); }
     @FXML private void handleLogout(ActionEvent event) { navigate(event, "/view/Login.fxml"); }
+    @FXML private void handleDetailCalculateBill(ActionEvent event) { navigate(event, "/view/billing.fxml"); }
+    
+    // Unused in current logic but present in FXML
+    @FXML private void handlePrevPage() {}
+    @FXML private void handleNextPage() {}
+    @FXML private void handleDetailEdit() {}
+    @FXML private void handleDetailDelete() {}
 
     private void navigate(ActionEvent event, String path) {
         try {
             Parent root = FXMLLoader.load(getClass().getResource(path));
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(root));
-        } catch (IOException e) { e.printStackTrace(); }
+        } catch (IOException e) {
+            System.err.println("Error loading: " + path);
+            e.printStackTrace();
+        }
     }
-
-    // Pagination Stubs (For UI buttons)
-    @FXML private void handlePrevPage(ActionEvent event) {}
-    @FXML private void handleNextPage(ActionEvent event) {}
 }

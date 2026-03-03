@@ -9,6 +9,7 @@ com\oceanview\resort\dao\GuestDAO.class
 com\oceanview\resort\Main.class
 com\oceanview\resort\controller\LoginController.class
 com\oceanview\resort\service\ReservationService.class
+com\oceanview\resort\controller\ViewReservationController.class
 controller\BillingController.class
 com\oceanview\resort\model\UserLogin.class
 com\oceanview\resort\AppLauncher.class
