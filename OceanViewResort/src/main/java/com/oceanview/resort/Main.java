@@ -7,16 +7,13 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-
     @Override
     public void start(Stage primaryStage) throws Exception {
-        // Correct path if file is in src/main/resources/view/Login.fxml
         Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-        primaryStage.setTitle("Ocean View Resort - Login");
+        primaryStage.setTitle("Ocean View Resort - Admin Terminal");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
     }
-
     public static void main(String[] args) {
         launch(args);
     }
