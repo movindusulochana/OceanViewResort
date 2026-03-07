@@ -5,6 +5,7 @@ import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 /**
  * Task 4: Calculate and Print Bill.
@@ -18,19 +19,27 @@ public class BillingService {
      * @return සාර්ථක නම් true ලබා දෙයි
      */
     public boolean processFinalBill(int reservationId) {
-        // කලින් අපි SQL එකේ ලියපු CalculateReservationBill procedure එක මෙතනදී call කරනවා
         String query = "{CALL CalculateReservationBill(?)}";
 
+        // The stored procedure does only SELECT..INTO (no client result set) + UPDATE.
+        // We use try-with-resources for both connection and statement — the driver
+        // cleans up any pending protocol state when the statement is closed.
+        // No explicit transaction wrapper needed: MariaDB auto-commits each DML
+        // statement inside the SP, and wrapping a DDL-free SP in setAutoCommit(false)
+        // has caused protocol-level failures with MySQL Connector/J 9.x + MariaDB.
         try (Connection conn = DatabaseConnection.getConnection();
              CallableStatement stmt = conn.prepareCall(query)) {
 
             stmt.setInt(1, reservationId);
-            stmt.execute();
+            stmt.execute();   // runs the SP; try-with-resources closes stmt & conn cleanly
+
             System.out.println("--> [SERVICE] Bill calculated for Reservation #" + reservationId);
             return true;
 
         } catch (SQLException e) {
-            System.err.println("--> [SERVICE ERROR] Billing failed: " + e.getMessage());
+            System.err.println("--> [SERVICE ERROR] Billing failed for Reservation #"
+                    + reservationId + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
@@ -42,13 +51,15 @@ public class BillingService {
         String query = "SELECT total_bill FROM reservations WHERE reservation_number = ?";
         
         try (Connection conn = DatabaseConnection.getConnection();
-             var stmt = conn.prepareStatement(query)) {
-            
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
             stmt.setInt(1, reservationId);
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                return rs.getDouble("total_bill");
+            // BUG FIX: ResultSet in try-with-resources; bare assignment leaks the
+            // cursor on any exception path inside the block.
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("total_bill");
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

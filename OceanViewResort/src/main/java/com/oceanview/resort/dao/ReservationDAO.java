@@ -22,18 +22,21 @@ public class ReservationDAO {
         
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            
+
             stmt.setInt(1, res.getGuestId());
             stmt.setInt(2, res.getRoomNumber());
             stmt.setDate(3, Date.valueOf(res.getCheckInDate()));
             stmt.setDate(4, Date.valueOf(res.getCheckOutDate()));
             stmt.setString(5, res.getStatus());
-            
+
             stmt.executeUpdate();
-            
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+
+            // BUG FIX: generated-keys ResultSet must be closed; omitting try-with-resources
+            // leaks the cursor when the caller's try-with-resources closes the statement.
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
         }
         return -1;
@@ -91,5 +94,64 @@ public class ReservationDAO {
             e.printStackTrace();
         }
         return list;
+    }
+
+    /**
+     * Checks whether a room already has a CONFIRMED reservation that overlaps
+     * with the proposed [checkIn, checkOut) window.
+     * Overlap condition: existing.check_in < proposed.checkOut
+     *                AND existing.check_out > proposed.checkIn
+     *
+     * Added for the Web layer (ReservationServlet overlap validation).
+     *
+     * @param roomNumber The room to check.
+     * @param checkIn    The proposed check-in date.
+     * @param checkOut   The proposed check-out date.
+     * @return true if an overlapping confirmed reservation exists.
+     */
+    public boolean hasOverlappingReservation(int roomNumber,
+                                              java.time.LocalDate checkIn,
+                                              java.time.LocalDate checkOut)
+            throws SQLException {
+        String query = "SELECT COUNT(*) FROM reservations "
+                + "WHERE room_number = ? AND status = 'Confirmed' "
+                + "AND check_in_date < ? AND check_out_date > ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, roomNumber);
+            stmt.setDate(2, Date.valueOf(checkOut));
+            stmt.setDate(3, Date.valueOf(checkIn));
+
+            // BUG FIX: ResultSet wrapped in try-with-resources so the cursor is released
+            // immediately after the count is read, regardless of exception path.
+            try (ResultSet rs = stmt.executeQuery()) {
+                return rs.next() && rs.getInt(1) > 0;
+            }
+        }
+    }
+
+    /**
+     * Updates the status of a reservation.
+     * Used by BillingServlet after checkout to set the reservation to "Checked-Out".
+     *
+     * @param reservationId The reservation to update.
+     * @param status        New status — must match DB enum: 'Confirmed', 'Checked-In',
+     *                      'Checked-Out', 'Cancelled'.
+     * @return true if at least one row was updated.
+     */
+    public boolean updateStatus(int reservationId, String status) {
+        String query = "UPDATE reservations SET status = ? WHERE reservation_number = ?";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setString(1, status);
+            stmt.setInt(2, reservationId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("--> [DAO ERROR] updateStatus failed for res #"
+                    + reservationId + ": " + e.getMessage());
+            return false;
+        }
     }
 }

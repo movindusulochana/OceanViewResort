@@ -1,5 +1,6 @@
 package com.oceanview.resort.api;
 
+import com.google.gson.JsonObject;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -21,12 +22,15 @@ public class NotificationClient {
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
 
-            // JSON Payload
-            String jsonBody = "{"
-                    + "\"to\":\"" + guestEmail + "\","
-                    + "\"subject\":\"Booking Confirmed\","
-                    + "\"body\":\"Your reservation #" + reservationNum + " at Ocean View Resort is successful.\""
-                    + "}";
+            // BUG FIX: Build the JSON payload with Gson so special characters in
+            // guestEmail or reservationNum (quotes, backslashes, etc.) are properly
+            // escaped.  Raw string concatenation can produce malformed JSON.
+            JsonObject payload = new JsonObject();
+            payload.addProperty("to",      guestEmail);
+            payload.addProperty("subject", "Booking Confirmed");
+            payload.addProperty("body",    "Your reservation #" + reservationNum
+                    + " at Ocean View Resort is successful.");
+            String jsonBody = payload.toString();
 
             HttpRequest request = HttpRequest.newBuilder()
                     .uri(URI.create(MOCK_API_URL))

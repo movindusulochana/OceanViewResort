@@ -22,20 +22,22 @@ public class GuestDAO {
      */
     public int addGuest(Guest guest) throws SQLException {
         String query = "INSERT INTO guests (name, address, contact_number) VALUES (?, ?, ?)";
-        
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            
+
             stmt.setString(1, guest.getName());
             stmt.setString(2, guest.getAddress());
             stmt.setString(3, guest.getContactNumber());
-            
+
             stmt.executeUpdate();
-            
-            // Retrieve the ID to link this guest to a reservation immediately
-            ResultSet rs = stmt.getGeneratedKeys();
-            if (rs.next()) {
-                return rs.getInt(1);
+
+            // BUG FIX: wrap generated-keys ResultSet in try-with-resources to guarantee
+            // the cursor is closed even if getInt() throws or the block exits early.
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
             }
         }
         return -1;
@@ -48,20 +50,22 @@ public class GuestDAO {
      */
     public Guest getGuestById(int id) {
         String query = "SELECT * FROM guests WHERE guest_id = ?";
-        
+
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
-            
+
             stmt.setInt(1, id);
-            ResultSet rs = stmt.executeQuery();
-            
-            if (rs.next()) {
-                return new Guest(
-                    rs.getInt("guest_id"),
-                    rs.getString("name"),
-                    rs.getString("address"),
-                    rs.getString("contact_number")
-                );
+            // BUG FIX: ResultSet must be in try-with-resources; bare assignment leaks
+            // the JDBC cursor if any exception is thrown before the method returns.
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return new Guest(
+                        rs.getInt("guest_id"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("contact_number")
+                    );
+                }
             }
         } catch (SQLException e) {
             System.err.println("--> [DAO ERROR] Error finding guest: " + e.getMessage());
@@ -115,6 +119,27 @@ public class GuestDAO {
             
         } catch (SQLException e) {
             System.err.println("--> [DAO ERROR] Error updating guest: " + e.getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Deletes a guest record by their unique ID.
+     * Added for the Web layer (GuestServlet DELETE endpoint).
+     * @param guestId The ID of the guest to delete.
+     * @return true if the record was deleted.
+     */
+    public boolean deleteGuest(int guestId) {
+        String query = "DELETE FROM guests WHERE guest_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, guestId);
+            return stmt.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+            System.err.println("--> [DAO ERROR] Error deleting guest: " + e.getMessage());
             return false;
         }
     }

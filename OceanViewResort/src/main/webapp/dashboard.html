@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OceanView Resort &mdash; Dashboard</title>
+    <link rel="stylesheet" href="assets/style.css">
+    <link rel="icon" href="assets/icon.jpeg" type="image/jpeg">
+</head>
+<body>
+
+<!-- ==================== APP SHELL ==================== -->
+<div class="app-shell">
+
+    <!-- ===== SIDEBAR ===== -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <img src="assets/icon.jpeg" alt="OceanView" onerror="this.style.display='none'">
+            <div class="sidebar-brand">
+                <span class="name">OceanView</span>
+                <span class="tagline">Resort System</span>
+            </div>
+        </div>
+
+        <span class="nav-section-label">Main Menu</span>
+
+        <div class="nav-item active" data-view="dashboard">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+            Dashboard
+        </div>
+
+        <span class="nav-section-label">Management</span>
+
+        <div class="nav-item" data-view="guests">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Guest Management
+        </div>
+
+        <div class="nav-item" data-view="rooms">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            Room Management
+        </div>
+
+        <div class="nav-item" data-view="reservations">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            Reservations
+        </div>
+
+        <div class="nav-item" data-view="billing">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Billing &amp; Checkout
+        </div>
+
+        <div class="nav-item" data-view="users">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            User Management
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="sidebar-footer">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">A</div>
+                <div class="user-details">
+                    <div class="uname" id="sidebarUsername">Admin</div>
+                    <div class="urole" id="uroleDisplay">Staff</div>
+                </div>
+                <button class="logout-btn" id="logoutBtn" title="Logout">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ===== MAIN AREA ===== -->
+    <div class="main-area">
+
+        <!-- Top Header -->
+        <header class="top-header">
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <span class="page-date" id="headerDate"></span>
+        </header>
+
+        <!-- Content -->
+        <div class="content-area">
+
+            <!-- ==================== 1. DASHBOARD ==================== -->
+            <section class="view-section active" id="view-dashboard">
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">&#x1F3E0;</div>
+                        <div><div class="stat-value" id="stat-available">&mdash;</div><div class="stat-label">Available Rooms</div></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">&#x1F465;</div>
+                        <div><div class="stat-value" id="stat-guests">&mdash;</div><div class="stat-label">Active Guests</div></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">&#x1F4C5;</div>
+                        <div><div class="stat-value" id="stat-checkins">&mdash;</div><div class="stat-label">Today's Check-ins</div></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">&#x1F3E8;</div>
+                        <div><div class="stat-value" id="stat-total">&mdash;</div><div class="stat-label">Total Rooms</div></div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Recent Reservations</span>
+                        <button class="btn btn-primary btn-sm" onclick="App.navigate('reservations')">View All</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table id="dashRecentTable">
+                            <thead><tr>
+                                <th>#</th><th>Guest ID</th><th>Room</th>
+                                <th>Check-in</th><th>Check-out</th><th>Status</th>
+                            </tr></thead>
+                            <tbody id="dashRecentBody"><tr><td colspan="6" class="loading-wrap"><div class="spinner"></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 2. GUEST MANAGEMENT ==================== -->
+            <section class="view-section" id="view-guests">
+                <div class="section-header">
+                    <h2 class="section-title">Guest Management</h2>
+                    <button class="btn btn-primary" id="addGuestBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Add Guest
+                    </button>
+                </div>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr>
+                                <th>ID</th><th>Name</th><th>Address</th><th>Contact</th><th>Actions</th>
+                            </tr></thead>
+                            <tbody id="guestsTableBody">
+                                <tr><td colspan="5" class="loading-wrap"><div class="spinner"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 3. ROOM MANAGEMENT ==================== -->
+            <section class="view-section" id="view-rooms">
+                <div class="section-header">
+                    <h2 class="section-title">Room Management</h2>
+                    <div style="display:flex;gap:8px;align-items:center;">
+                        <label style="font-size:.82rem;font-weight:600;color:var(--text-muted);">Filter:</label>
+                        <select id="roomStatusFilter" class="form-control" style="width:150px;padding:8px 12px;">
+                            <option value="all">All Rooms</option>
+                            <option value="Available">Available</option>
+                            <option value="Occupied">Occupied</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr>
+                                <th>Room No.</th><th>Type</th><th>Price / Night</th><th>Status</th>
+                            </tr></thead>
+                            <tbody id="roomsTableBody">
+                                <tr><td colspan="4" class="loading-wrap"><div class="spinner"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 4. RESERVATIONS ==================== -->
+            <section class="view-section" id="view-reservations">
+                <div class="section-header">
+                    <h2 class="section-title">Reservations</h2>
+                    <button class="btn btn-primary" id="newResvBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        New Reservation
+                    </button>
+                </div>
+                <div class="table-container">
+                    <div class="table-responsive">
+                        <table>
+                            <thead><tr>
+                                <th>Res. #</th><th>Guest ID</th><th>Room</th>
+                                <th>Check-in</th><th>Check-out</th>
+                                <th>Total Bill</th><th>Status</th>
+                                <th>Actions</th>
+                            </tr></thead>
+                            <tbody id="resvTableBody">
+                                <tr><td colspan="8" class="loading-wrap"><div class="spinner"></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 5. BILLING & CHECKOUT ==================== -->
+            <section class="view-section" id="view-billing">
+                <div class="section-header">
+                    <h2 class="section-title">Billing &amp; Checkout</h2>
+                </div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start;">
+
+                    <!-- Lookup panel -->
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">Lookup Reservation</span></div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="billResvId">Reservation Number</label>
+                                <input type="number" id="billResvId" class="form-control" placeholder="e.g. 5" min="1">
+                            </div>
+                            <button class="btn btn-primary btn-block" id="lookupBillBtn">Fetch Bill</button>
+                        </div>
+                    </div>
+
+                    <!-- Receipt panel -->
+                    <div class="card" id="receiptPanel" style="display:none;">
+                        <div class="card-header">
+                            <span class="card-title">&#x1F9FE; Bill Receipt</span>
+                            <span class="badge badge-primary" id="receiptStatus">Pending</span>
+                        </div>
+                        <div class="card-body">
+                            <div class="receipt-card">
+                                <div class="receipt-row"><span>Reservation #</span><span id="r-id">&mdash;</span></div>
+                                <div class="receipt-row"><span>Guest ID</span><span id="r-guest">&mdash;</span></div>
+                                <div class="receipt-row"><span>Room</span><span id="r-room">&mdash;</span></div>
+                                <div class="receipt-row"><span>Check-in</span><span id="r-checkin">&mdash;</span></div>
+                                <div class="receipt-row"><span>Check-out</span><span id="r-checkout">&mdash;</span></div>
+                                <div class="receipt-row total"><span>Total Bill</span><span id="r-total">&mdash;</span></div>
+                            </div>
+                            <div style="margin-top:18px;">
+                                <button class="btn btn-success btn-block" id="checkoutBtn">
+                                    &#x2713; Process Checkout &amp; Calculate Bill
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ==================== 6. USER MANAGEMENT ==================== -->
+            <section class="view-section" id="view-users">
+                <div class="section-header">
+                    <h2 class="section-title">User Management</h2>
+                    <button class="btn btn-primary" id="addUserBtn">+ Add User</button>
+                </div>
+
+                <div class="card">
+                    <div class="card-header"><span class="card-title">System Users</span></div>
+                    <div class="card-body" style="padding:0">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Username</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                <tr><td colspan="4"><div class="loading-wrap"><div class="spinner"></div></div></td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div><!-- /content-area -->
+    </div><!-- /main-area -->
+</div><!-- /app-shell -->
+
+<!-- ==================== MODALS ==================== -->
+
+<!-- Add / Edit Guest Modal -->
+<div class="modal-overlay" id="guestModal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title" id="guestModalTitle">Add Guest</span>
+            <button class="modal-close" onclick="App.closeModal('guestModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="guestId">
+            <div class="form-group">
+                <label for="guestName">Full Name</label>
+                <input type="text" id="guestName" class="form-control" placeholder="Enter full name" required>
+            </div>
+            <div class="form-group">
+                <label for="guestAddress">Address</label>
+                <input type="text" id="guestAddress" class="form-control" placeholder="Enter address" required>
+            </div>
+            <div class="form-group">
+                <label for="guestContact">Contact Number</label>
+                <input type="text" id="guestContact" class="form-control" placeholder="e.g. 0771234567" required>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="App.closeModal('guestModal')">Cancel</button>
+            <button class="btn btn-primary" id="saveGuestBtn">Save Guest</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add Reservation Modal -->
+<div class="modal-overlay" id="resvModal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title">New Reservation</span>
+            <button class="modal-close" onclick="App.closeModal('resvModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="resvGuestId">Select Guest</label>
+                <select id="resvGuestId" class="form-control"><option value="">Loading guests&hellip;</option></select>
+            </div>
+            <div class="form-group">
+                <label for="resvRoomNum">Select Room (Available Only)</label>
+                <select id="resvRoomNum" class="form-control"><option value="">Loading rooms&hellip;</option></select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="resvCheckIn">Check-in Date</label>
+                    <input type="date" id="resvCheckIn" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label for="resvCheckOut">Check-out Date</label>
+                    <input type="date" id="resvCheckOut" class="form-control" required>
+                </div>
+            </div>
+            <div class="alert" id="resvError"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="App.closeModal('resvModal')">Cancel</button>
+            <button class="btn btn-primary" id="saveResvBtn">Create Reservation</button>
+        </div>
+    </div>
+</div>
+
+<!-- Add / Edit User Modal -->
+<div class="modal-overlay" id="userModal">
+    <div class="modal">
+        <div class="modal-header">
+            <span class="modal-title" id="userModalTitle">Add User</span>
+            <button class="modal-close" onclick="App.closeModal('userModal')">&times;</button>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="userId">
+            <div class="form-group">
+                <label for="userUsername">Username</label>
+                <input type="text" id="userUsername" class="form-control" placeholder="Enter username" required>
+            </div>
+            <div class="form-group">
+                <label for="userPassword">Password <small style="color:#888">(leave blank to keep existing)</small></label>
+                <input type="password" id="userPassword" class="form-control" placeholder="Enter password">
+            </div>
+            <div class="form-group">
+                <label for="userRole">Role</label>
+                <select id="userRole" class="form-control">
+                    <option value="Admin">Admin</option>
+                    <option value="Staff" selected>Staff</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="App.closeModal('userModal')">Cancel</button>
+            <button class="btn btn-primary" id="saveUserBtn">Save User</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- ==================== APP JAVASCRIPT ==================== -->
+<script src="assets/app.js"></script>
+
+</body>
+</html>

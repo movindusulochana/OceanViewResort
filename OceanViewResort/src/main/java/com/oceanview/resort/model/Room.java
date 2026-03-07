@@ -13,12 +13,13 @@ public class Room {
     // Default Constructor
     public Room() {}
 
-    // Constructor for creating a new room entry
+    // Constructor for creating a new room entry.
+    // BUG FIX: default roomType to "Standard" if the DB column is NULL (e.g. Room 301).
     public Room(int roomNumber, String roomType, double pricePerNight, String status) {
-        this.roomNumber = roomNumber;
-        this.roomType = roomType;
+        this.roomNumber    = roomNumber;
+        this.roomType      = (roomType != null && !roomType.trim().isEmpty()) ? roomType : "Standard";
         this.pricePerNight = pricePerNight;
-        this.status = status;
+        this.status        = status;
     }
 
     // Getters and Setters

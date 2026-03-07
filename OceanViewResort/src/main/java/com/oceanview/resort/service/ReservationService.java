@@ -35,19 +35,22 @@ public class ReservationService {
      */
     public boolean createNewBooking(Reservation reservation, String guestEmail) {
         try {
-            // STEP 1: Save the reservation to the database using the DAO
+            // STEP 1: Persist the reservation.  total_bill starts at 0.0 and is
+            // calculated later by BillingService when the guest checks out.
             int resId = reservationDAO.addReservation(reservation);
-            
+
             if (resId > 0) {
-                // STEP 2: Automatically calculate the total bill (Task 4)
-                // This calls the stored procedure via BillingService
-                billingService.processFinalBill(resId);
-                
-                // STEP 3: Trigger the external Web Service (Task B.i)
-                // This sends a simulated email/SMS confirmation to the guest
+                // BUG FIX: The stored procedure CalculateReservationBill must NOT be
+                // called here.  Billing only happens at checkout (BillingServlet.doPost).
+                // Calling it at reservation creation time (a) runs the procedure before
+                // the stay has occurred, (b) can corrupt total_bill with a zero-night
+                // calculation, and (c) leaves the connection in a bad state before the
+                // guest even checks in.  Remove that call entirely.
+
+                // STEP 2: Send booking-confirmation notification.
                 notificationClient.sendBookingConfirmation(guestEmail, String.valueOf(resId));
-                
-                System.out.println("--> [SERVICE SUCCESS] Reservation #" + resId + " finalized.");
+
+                System.out.println("--> [SERVICE SUCCESS] Reservation #" + resId + " created.");
                 return true;
             }
         } catch (SQLException e) {
